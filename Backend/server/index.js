@@ -3,19 +3,11 @@ import cors from "cors";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import { initDb, all, get, run } from "./db.js";
-import cors from "cors";
 
 dotenv.config();
 initDb();
 
 const app = express();
-app.use(cors());
-app.use(express.json());
-
-const PORT = process.env.PORT || 4000;
-const JWT_SECRET = process.env.JWT_SECRET || "change-me";
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@org.com";
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
 app.use(cors({
   origin: [
     "http://localhost:5173",
@@ -23,6 +15,13 @@ app.use(cors({
     
   ]
 }));
+
+app.use(express.json());
+
+const PORT = process.env.PORT || 4000;
+const JWT_SECRET = process.env.JWT_SECRET || "change-me";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@org.com";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
 
 function signToken(payload) {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
