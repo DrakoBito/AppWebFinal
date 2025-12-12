@@ -14,7 +14,7 @@ export default function AdminLogin() {
     try {
       const r = await AdminAPI.login(email, password);
       setToken(r.token);
-      nav("/admin");
+      nav("/portal-admin-9xK72/panel");
     } catch (e2) {
       setErr(e2.message);
     }

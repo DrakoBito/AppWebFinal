@@ -8,20 +8,16 @@ dotenv.config();
 initDb();
 
 const app = express();
-app.use(cors({
-  origin: [
-    "https://app-web-final.vercel.app/",
-    "https://appwebfinal-i74f.onrender.com", 
-    
-  ]
-}));
 
-app.use(express.json());
+// IMPORTANTE: CORS y JSON deben estar ANTES de las rutas
+app.use(cors());
+app.use(express.json()); // ← Asegúrate que esté aquí
 
 const PORT = process.env.PORT || 4000;
 const JWT_SECRET = process.env.JWT_SECRET || "change-me";
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@org.com";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
+
 
 function signToken(payload) {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
@@ -127,20 +123,39 @@ app.get("/api/admin/pets", authAdmin, async (req, res) => {
 
 // --- ADMIN: CREATE PET
 app.post("/api/admin/pets", authAdmin, async (req, res) => {
+  console.log('Request body received:', req.body); // Debug
+  
   const { name, description, status = "AVAILABLE", photos = [] } = req.body || {};
-  if (!name || !description) return res.status(400).json({ error: "Missing name/description" });
+  
+  // Validación de campos requeridos
+  if (!name || !description) {
+    return res.status(400).json({ 
+      error: "Missing required fields: name and description are required" 
+    });
+  }
+  
   if (!["AVAILABLE", "RESERVED", "ADOPTED"].includes(status)) {
     return res.status(400).json({ error: "Invalid status" });
   }
-  if (!Array.isArray(photos)) return res.status(400).json({ error: "photos must be array" });
+  
+  if (!Array.isArray(photos)) {
+    return res.status(400).json({ error: "photos must be array" });
+  }
 
   const photos_json = JSON.stringify(photos.map(String));
-  const r = await run(
-    `INSERT INTO pets (name, description, status, photos_json) VALUES (?,?,?,?)`,
-    [String(name).trim(), String(description).trim(), status, photos_json]
-  );
-  const pet = await get(`SELECT * FROM pets WHERE id=?`, [r.lastID]);
-  res.json({ ...pet, photos: JSON.parse(pet.photos_json) });
+  
+  try {
+    const r = await run(
+      `INSERT INTO pets (name, description, status, photos_json) VALUES (?,?,?,?)`,
+      [name.trim(), description.trim(), status, photos_json]
+    );
+    
+    const pet = await get(`SELECT * FROM pets WHERE id=?`, [r.lastID]);
+    res.json({ ...pet, photos: JSON.parse(pet.photos_json) });
+  } catch (error) {
+    console.error('Error creating pet:', error);
+    res.status(500).json({ error: "Database error" });
+  }
 });
 
 // --- ADMIN: DELETE PET

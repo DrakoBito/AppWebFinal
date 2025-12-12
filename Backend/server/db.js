@@ -57,26 +57,71 @@ export function initDb() {
 
     // Seed: si no hay mascotas, crea 2 de ejemplo
     db.get(`SELECT COUNT(*) as c FROM pets`, (err, row) => {
-      if (err) return;
-      if (row.c === 0) {
-        const sample1 = JSON.stringify([
-          "https://images.unsplash.com/photo-1548199973-03cce0bbc87b",
-          "https://images.unsplash.com/photo-1517423440428-a5a00ad493e8"
-        ]);
-        const sample2 = JSON.stringify([
-          "https://images.unsplash.com/photo-1518791841217-8f162f1e1131",
-          "https://images.unsplash.com/photo-1511044568932-338cba0ad803"
-        ]);
-        db.run(
-          `INSERT INTO pets (name, description, status, photos_json) VALUES (?,?,?,?)`,
-          ["Luna", "Cariñosa y tranquila. Le encanta dormir cerca de personas.", "AVAILABLE", sample1]
-        );
-        db.run(
-          `INSERT INTO pets (name, description, status, photos_json) VALUES (?,?,?,?)`,
-          ["Max", "Juguetón y sociable. Ideal para hogar con espacio.", "AVAILABLE", sample2]
-        );
-      }
-    });
+        if (err) return;
+        if (row.c === 0) {
+            const sample1 = JSON.stringify([
+            "https://images.unsplash.com/photo-1548199973-03cce0bbc87b",
+            "https://images.unsplash.com/photo-1517423440428-a5a00ad493e8"
+            ]);
+            const sample2 = JSON.stringify([
+            "https://images.unsplash.com/photo-1518791841217-8f162f1e1131",
+            "https://images.unsplash.com/photo-1511044568932-338cba0ad803"
+            ]);
+            const sample3 = JSON.stringify([
+            "https://images.unsplash.com/photo-1507146426996-ef05306b995a",
+            "https://images.unsplash.com/photo-1525253086316-d0c936c814f8"
+            ]);
+            const sample4 = JSON.stringify([
+            "https://images.unsplash.com/photo-1530281700549-e82e7bf110d6",
+            "https://images.unsplash.com/photo-1517849845537-4d257902454a"
+            ]);
+            const sample5 = JSON.stringify([
+            "https://images.unsplash.com/photo-1543852786-1cf6624b9987",
+            "https://images.unsplash.com/photo-1517331156700-3c241d2b4d83"
+            ]);
+            const sample6 = JSON.stringify([
+            "https://images.unsplash.com/photo-1518717758536-85ae29035b6d",
+            "https://images.unsplash.com/photo-1552053831-71594a27632d"
+            ]);
+            const sample7 = JSON.stringify([
+            "https://images.unsplash.com/photo-1529778873920-4da4926a72c2",
+            "https://images.unsplash.com/photo-1546015720-b8b30df5aa27"
+            ]);
+
+            // 2 originales
+            db.run(
+            `INSERT INTO pets (name, description, status, photos_json) VALUES (?,?,?,?)`,
+            ["Luna", "Cariñosa y tranquila. Le encanta dormir cerca de personas.", "AVAILABLE", sample1]
+            );
+            db.run(
+            `INSERT INTO pets (name, description, status, photos_json) VALUES (?,?,?,?)`,
+            ["Max", "Juguetón y sociable. Ideal para hogar con espacio.", "AVAILABLE", sample2]
+            );
+
+            // +5 nuevas
+            db.run(
+            `INSERT INTO pets (name, description, status, photos_json) VALUES (?,?,?,?)`,
+            ["Milo", "Curioso y tierno. Se adapta rápido y ama los paseos cortos.", "AVAILABLE", sample3]
+            );
+            db.run(
+            `INSERT INTO pets (name, description, status, photos_json) VALUES (?,?,?,?)`,
+            ["Nala", "Dulce y muy compañera. Perfecta para familia tranquila.", "AVAILABLE", sample4]
+            );
+            db.run(
+            `INSERT INTO pets (name, description, status, photos_json) VALUES (?,?,?,?)`,
+            ["Toby", "Energético y obediente. Le encantan los juguetes y aprender trucos.", "AVAILABLE", sample5]
+            );
+            db.run(
+            `INSERT INTO pets (name, description, status, photos_json) VALUES (?,?,?,?)`,
+            ["Kira", "Súper cariñosa. Busca mucho contacto y se porta excelente en casa.", "AVAILABLE", sample6]
+            );
+            db.run(
+            `INSERT INTO pets (name, description, status, photos_json) VALUES (?,?,?,?)`,
+            ["Simba", "Tranquilo y amigable. Ideal para departamento y rutinas estables.", "AVAILABLE", sample7]
+            );
+        }
+        });
+
   });
 }
 
