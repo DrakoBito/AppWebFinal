@@ -10,7 +10,7 @@ initDb();
 const app = express();
 app.use(cors({
   origin: [
-    "http://localhost:5173",
+    "https://app-web-final.vercel.app/",
     "https://appwebfinal-i74f.onrender.com", 
     
   ]
