@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:4000/api";
+const API_BASE = "https://appwebfinal-i74f.onrender.com/";
 
 export function getToken() {
   return localStorage.getItem("admin_token");
